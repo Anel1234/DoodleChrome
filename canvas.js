@@ -10,7 +10,7 @@ window.onload = function() {
         function(request, sender, sendResponse) {
             console.log(request);
           if( request === "draw" ) {
-              
+            $("#pilavID").show();
           }
       
           if( request.message === "Not Existing" ) {
@@ -33,11 +33,7 @@ window.onload = function() {
     //canv.width = "100%";//$(document).width();//"auto";//document.documentElement.scrollWidth;//window.innerWidth//document.body.clientWidth;
     //canv.height = "100%";//$(document).height();//"auto"//document.documentElement.scrollHeight;//window.innerHeight;//document.body.clientHeight;
     document.body.appendChild(canv);
-    $('#pilavID').hide();
     ctx = canv.getContext("2d");
-
-    window.addEventListener('resize', resizeCanvas, false);
-    resizeCanvas();
 
     $("#pilavID").bind( "mousedown", function (e) {
         //alert("hello");
@@ -56,6 +52,10 @@ window.onload = function() {
             mousePressed = false;
         }
     }));
+
+    $('#pilavID').hide();
+    window.addEventListener('resize', resizeCanvas, false);
+    resizeCanvas();
 
     // $("#pilavID").mouseleave(function (e) {
     //     if (mousePressed) {
