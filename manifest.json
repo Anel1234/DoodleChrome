@@ -12,7 +12,7 @@
     "content_scripts": [
       {
         "matches": ["https://en.wikipedia.org/*"],
-        "js": ["canvas.js"]
+        "js": ["node_modules/jquery/dist/jquery.min.js", "canvas.js", "popupScript.js"]
       }
     ],
     "permissions": [
@@ -21,6 +21,7 @@
       "https://*/*"
     ],
     "browser_action": {
-      "default_popup": "popup.html"
+      "default_popup": "popup.html",
+      "js": "popupScript.js"
     }
   }
