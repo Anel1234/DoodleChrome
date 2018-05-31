@@ -11,14 +11,20 @@
             
     "content_scripts": [
       {
-        "matches": ["https://en.wikipedia.org/*"],
-        "js": ["node_modules/jquery/dist/jquery.min.js", "canvas.js", "popupScript.js"]
+        "matches": ["<all_urls>"],
+        "js": ["node_modules/jquery/dist/jquery.min.js", "canvas.js", "node_modules/bootstrap/dist/js/bootstrap.min.js", "jscolor.js" ],
+        "css": ["popuptest.css", "node_modules/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css", "node_modules/font-awesome/css/font-awesome.css", "node_modules/bootstrap/dist/css/bootstrap.min.css"]
       }
+    ],
+    "web_accessible_resources": [
+      "popup.html",
+      "test.html"
     ],
     "permissions": [
       "tabs",
       "http://*/*",
-      "https://*/*"
+      "https://*/*",
+      "<all_urls>"
     ],
     "browser_action": {
       "default_popup": "popup.html",
