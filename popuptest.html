@@ -2,11 +2,23 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title></title>
-        <!-- <script src="jscolor.js"></script> -->
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <!-- <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css"> -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+        <link rel="stylesheet" href="popupstyle.css">
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+        <script src="node_modules/jquery/dist/jquery.min.js"></script>
+        <!-- <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script> -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="jscolor.js"></script>
+        <script src="popupScript.js"></script>
+        <!-- <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css"></script> -->
+        
     </head>
-        <body>       
+        <body>
             <div id="pilavdiv">
                 <div id="pilavdivheader">Click here to move</div>
             <div class="btn-group btn-group-justified">
@@ -23,7 +35,7 @@
                     <button id="undobutton" type="button" class="btn btn-primary fas fa-undo"></button>     
                 </div>
                 <div class="btn-group">
-                    <button id="erasebutton" type="button" class="btn btn-primary fas fa-dashcube"></button>     
+                    <button id="erasebutton" type="button" class="btn btn-primary fas fa-eraser"></button>     
                 </div>
                 <div class="btn-group">
                     <button id="popoutbutton" type="button" class="btn btn-primary fas fa-external-link-alt"></button>     
@@ -42,6 +54,6 @@
                     <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
                 </div>
             </div>
-        </div>
+            </div>
         </body>
     </html>

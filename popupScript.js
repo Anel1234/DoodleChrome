@@ -1,45 +1,10 @@
 window.onload = function() {
 
-    dragElement(document.getElementById(("mydiv")));
-
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(elmnt.id + "header")) {
-    /* if present, the header is where you move the DIV from:*/
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-  } else {
-    /* otherwise, move the DIV from anywhere inside the DIV:*/
-    elmnt.onmousedown = dragMouseDown;
-  }
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement() {
-    /* stop moving when mouse button is released:*/
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, 'loaded', function(response) {
+        //   console.log('draw');
+        });
+      });
 
     $(".btn").click(function(){
         $(".btn").removeClass("active");
@@ -47,6 +12,7 @@ function dragElement(elmnt) {
      });
 
     $("#popoutbutton").click(function(){
+
         // chrome.windows.create({'url': 'popup.html', 'type': 'popup'}, function(window) {
         // });
         //window.open(chrome.extension.getURL("popup.html"),"dc-popout-window","width=400,height=200")
@@ -60,8 +26,25 @@ function dragElement(elmnt) {
         chrome.tabs.executeScript(tabs[0].id, {code: "selected"}, function(results){
             $('#' + results[0] + 'button').addClass("active");
         });
+        chrome.tabs.executeScript(tabs[0].id, {code: "selectedWidth"}, function(results){
+            $('#myRange').val(results[0]);
+        });
+        chrome.tabs.executeScript(tabs[0].id, {code: "selectedColor"}, function(results){
+            document.getElementById('colorInput').jscolor.fromString(results[0].replace('#',''));
+        });
     });
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementById('colorInput');
+    link.addEventListener('change', function(response) {
+        document.getElementById('rect').style.backgroundColor = '#' + response.srcElement.jscolor
+        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, 'colorcode:#' + response.srcElement.jscolor, function(response) {
+            });
+        });
+    });
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     var link = document.getElementById('selectbutton');
@@ -110,3 +93,19 @@ document.addEventListener('DOMContentLoaded', function() {
           });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementById('myRange');
+    link.addEventListener('change', function(response) {
+        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, 'rangechange:' + response.srcElement.value, function(response) {
+            });
+        });
+    });
+});
+
+function update(jscolor) {
+    // 'jscolor' instance can be used as a string
+    console.log('jscolor');
+    document.getElementById('rect').style.backgroundColor = '#' + jscolor
+}

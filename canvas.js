@@ -3,69 +3,53 @@ var lastX, lastY;
 var ctx;
 var lines = [];
 var selected = 'select';
+var selectedColor = '000000';
+var selectedWidth = 25;
 
 
 window.onload = function() {
 
-    $.get(chrome.extension.getURL('test.html'), function(data) {
-        $(data).appendTo('body');
-        // Or if you're using jQuery 1.8+:
-        // $($.parseHTML(data)).appendTo('body');
-    });
+    // $.get(chrome.extension.getURL('test.html'), function(data) {
+    //     $(data).appendTo('body');
+    //     // Or if you're using jQuery 1.8+:
+    //     // $($.parseHTML(data)).appendTo('body');
+    //     attachDrag();
+    // });
 
+    
     //$('body').append(string);
-
-    // dragElement(document.getElementById(("mydiv")));
-
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(elmnt.id + "header")) {
-    /* if present, the header is where you move the DIV from:*/
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-  } else {
-    /* otherwise, move the DIV from anywhere inside the DIV:*/
-    elmnt.onmousedown = dragMouseDown;
-  }
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement() {
-    /* stop moving when mouse button is released:*/
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
 
     chrome.runtime.onMessage.addListener(
         function(request, sender, sendResponse) {
 
+            if( request === "loaded" ) {
+                resizeCanvas();
+            }
+
             if( request === "popout" ) {
-                console.log('hello');
-                var div = document.createElement("div");
-                var textnode = document.createTextNode("Water"); 
-                div.appendChild(textnode);
-                document.body.appendChild(div);
-                div.draggable = true;
+                resizeCanvas();
+                if($('#pilavdiv').length) {
+                    if($('#pilavdiv').is(":visible")) {
+                        $('#pilavdiv').hide();
+                    }
+                    else $('#pilavdiv').show();
+                }
+                else{
+                $.get(chrome.extension.getURL('popuptest.html'), function(data) {
+                    $(data).appendTo('body');
+                    // Or if you're using jQuery 1.8+:
+                    // $($.parseHTML(data)).appendTo('body');
+                    attachDrag();
+                });
+            }
+            }
+
+            if( request.includes('colorcode')) {
+                selectedColor = request.replace('colorcode:','');
+            }
+
+            if( request.includes('rangechange')) {
+                selectedWidth = request.replace('rangechange:','');
             }
 
             if( request === "select" ) {
@@ -132,7 +116,7 @@ function dragElement(elmnt) {
     $('#pilavID').hide();
     window.addEventListener('resize', resizeCanvas, false);
     $("#pilavID").css('pointer-events', "none");
-    resizeCanvas();
+    //resizeCanvas();
 
 }
 
@@ -154,11 +138,10 @@ function resizeCanvas() {
 
 function Draw(x, y, isDown) {
     if (isDown) {
-        var width = 10;
         ctx.beginPath();
-        ctx.strokeStyle = 'rgba(255,255,0)';
+        ctx.strokeStyle = selectedColor;
         //alert(parseInt($('#myRange').val()));
-        ctx.lineWidth = width;/*$('#selWidth').val();*/
+        ctx.lineWidth = selectedWidth;/*$('#selWidth').val();*/
         ctx.lineJoin = "round";
         ctx.moveTo(lastX, lastY);
         ctx.lineTo(x, y);
@@ -166,7 +149,7 @@ function Draw(x, y, isDown) {
         ctx.stroke();
         // linelength++;
 
-        var line = { strokeStyle: $('#selColor').css("background-color"), lineWidth: width, lineJoin: "round", lastX: lastX, lastY: lastY, x: x, y: y }
+        var line = { strokeStyle: $('#selColor').css("background-color"), lineWidth: selectedWidth, lineJoin: "round", lastX: lastX, lastY: lastY, x: x, y: y }
         lines.push(line);
 
         
@@ -197,11 +180,47 @@ function redrawCanvas() {
     }
 };
 
-var string = `<div id="mydiv">
-<div id="mydivheader">Click here to move</div>
-<p>Move</p>
-<p>this</p>
-<p>DIV</p>
-</div>`
+function attachDrag() {
+    dragElement(document.getElementById(("pilavdiv")));
+    
+    function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    /* if present, the header is where you move the DIV from:*/
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    /* otherwise, move the DIV from anywhere inside the DIV:*/
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    /* stop moving when mouse button is released:*/
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+}
 
 
