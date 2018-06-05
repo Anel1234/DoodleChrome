@@ -12,7 +12,7 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["node_modules/jquery/dist/jquery.min.js", "canvas.js", "node_modules/bootstrap/dist/js/bootstrap.min.js", "jscolor.js" ],
+        "js": ["node_modules/jquery/dist/jquery.min.js", "canvas.js", "node_modules/bootstrap/dist/js/bootstrap.min.js", "jscolor.js", "node_modules/interactjs/dist/interact.min.js" ],
         "css": ["popuptest.css", "node_modules/bootstrap/dist/css/bootstrap.min.css", "node_modules/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css"]
       }
     ],

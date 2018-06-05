@@ -90,6 +90,8 @@ window.onload = function() {
     canv.addEventListener("click", function(){
         console.log('A Click!');
     })
+
+    window.addEventListener("paste", pasteHandler);
     //canv.style.backgroundColor = 'black';
     //canv.width = "100%";//$(document).width();//"auto";//document.documentElement.scrollWidth;//window.innerWidth//document.body.clientWidth;
     //canv.height = "100%";//$(document).height();//"auto"//document.documentElement.scrollHeight;//window.innerHeight;//document.body.clientHeight;
@@ -180,6 +182,49 @@ function redrawCanvas() {
     }
 };
 
+function pasteHandler(e){
+
+    // var imageCanvas = document.createElement('canvas');
+    // imageCanvas.style.position = 'absolute'
+    // imageCanvas.style.zIndex = 999999;
+    // imageCanvas.style.height = 1000;
+    // imageCanvas.style.width = 1000;
+    // //ctx.appendChild(imageCanvas);
+    // document.body.appendChild(imageCanvas);
+
+    if(e.clipboardData == false) return false; //empty
+    var items = e.clipboardData.items;
+    console.log(items);
+    if(items == undefined) return false;
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") == -1) continue; //not image
+        var blob = items[i].getAsFile();
+        var URLObj = window.URL || window.webkitURL;
+        var source = URLObj.createObjectURL(blob);
+        paste_createImage(source);
+        }
+	}
+//draw pasted object
+function paste_createImage(source){
+    var imageCanvas = document.createElement('canvas');
+    imageCanvas.style.position = 'absolute'
+    imageCanvas.style.zIndex = 999999;
+    imageCanvas.style.height = 1000;
+    imageCanvas.style.width = 1000;
+    imageCanvas.style.background = 'transparent';
+    var imagectx = imageCanvas.getContext("2d");
+    //ctx.appendChild(imageCanvas);
+    //document.body.appendChild(imageCanvas);
+	var pastedImage = new Image();
+	pastedImage.onload = function(){
+        console.log(pastedImage);
+        imagectx.drawImage(pastedImage, 0, 0);
+		}
+    pastedImage.src = source;
+    
+    document.body.appendChild(imageCanvas);
+	}
+
 function attachDrag() {
     dragElement(document.getElementById(("pilavdiv")));
     
@@ -219,7 +264,7 @@ function attachDrag() {
     /* stop moving when mouse button is released:*/
     document.onmouseup = null;
     document.onmousemove = null;
-  }
+}
 }
 }
 
