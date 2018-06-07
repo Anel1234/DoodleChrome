@@ -206,23 +206,37 @@ function pasteHandler(e){
 	}
 //draw pasted object
 function paste_createImage(source){
+    var somediv = document.createElement('div');
+    somediv.className = 'testID';
     var imageCanvas = document.createElement('canvas');
     imageCanvas.style.position = 'absolute'
     imageCanvas.style.zIndex = 999999;
-    imageCanvas.style.height = 1000;
-    imageCanvas.style.width = 1000;
     imageCanvas.style.background = 'transparent';
     var imagectx = imageCanvas.getContext("2d");
-    //ctx.appendChild(imageCanvas);
-    //document.body.appendChild(imageCanvas);
 	var pastedImage = new Image();
 	pastedImage.onload = function(){
-        console.log(pastedImage);
+        console.log(this.width);
+        imagectx.canvas.height = this.height;
+        imagectx.canvas.width = this.width;
+        //somediv.height = this.height;
+        //somediv.width = this.width;
+        console.log(somediv.height);
+        console.log(somediv.width);
         imagectx.drawImage(pastedImage, 0, 0);
 		}
     pastedImage.src = source;
-    
-    document.body.appendChild(imageCanvas);
+    somediv.appendChild(imageCanvas);
+    document.body.appendChild(somediv);
+    somediv.height = imagectx.canvas.height;
+    somediv.width = imagectx.canvas.width;
+    //document.body.appendChild(imageCanvas);
+    // somediv.onresize = function() {
+    //     console.log(imagectx.canvas.height);
+    //     console.log(imagectx.canvas.width);
+    //     imagectx.canvas.height = 100;//somediv.height;
+    //     imagectx.canvas.width = 100;//somediv.width;
+    // }
+    $(".testID").draggable().selectable();//.resizable({ handles: "all" })
 	}
 
 function attachDrag() {
