@@ -64,6 +64,11 @@ window.onload = function() {
                 ctx.globalAlpha=1;
                 selected = "draw";
             }
+            // if( request === "paste") {
+            //     //resizeCanvas();
+            //     var event = new CustomEvent("paste");
+            //     window.dispatchEvent(event);
+            // }
             if( request === "highlight" ) {
                 //resizeCanvas();
                 $("#pilavID").css('pointer-events', "auto");
@@ -149,9 +154,10 @@ function Draw(x, y, isDown) {
         ctx.lineTo(x, y);
         ctx.closePath();       
         ctx.stroke();
+
         // linelength++;
 
-        var line = { strokeStyle: $('#selColor').css("background-color"), lineWidth: selectedWidth, lineJoin: "round", lastX: lastX, lastY: lastY, x: x, y: y }
+        var line = { strokeStyle: selectedColor, lineWidth: selectedWidth, lineJoin: "round", lastX: lastX, lastY: lastY, x: x, y: y, selected: selected }
         lines.push(line);
 
         
@@ -167,10 +173,19 @@ function redrawCanvas() {
     var i;
     var len = lines.length;
     for (i = 0; i < len; i++) {
-        
+
         var x = lines[i];
         //alert(x);
         
+        if (x.selected == 'highlight') {
+            ctx.globalCompositeOperation="xor";
+            ctx.globalAlpha=0.5;
+            console.log('testing');
+        }
+        else {
+            ctx.globalCompositeOperation="source-over";
+            ctx.globalAlpha=1;
+        }
         ctx.beginPath();
         ctx.strokeStyle = x.strokeStyle;
         ctx.lineWidth = x.lineWidth;
@@ -208,10 +223,15 @@ function pasteHandler(e){
 function paste_createImage(source){
     var somediv = document.createElement('div');
     somediv.className = 'testID';
+    somediv.style.top = $(window).scrollTop() + (window.innerHeight / 2) + "px" //$(window).scrollTop() / 2 + "px"; //document.documentElement.scrollHeight + "px";
+    somediv.style.left = (window.innerWidth / 2) + "px";
+    somediv.style.position = 'absolute';
+
     var imageCanvas = document.createElement('canvas');
     imageCanvas.style.position = 'absolute'
     imageCanvas.style.zIndex = 999999;
     imageCanvas.style.background = 'transparent';
+
     var imagectx = imageCanvas.getContext("2d");
 	var pastedImage = new Image();
 	pastedImage.onload = function(){
@@ -238,6 +258,11 @@ function paste_createImage(source){
     // }
     $(".testID").draggable().selectable();//.resizable({ handles: "all" })
 	}
+
+
+
+
+
 
 function attachDrag() {
     dragElement(document.getElementById(("pilavdiv")));
