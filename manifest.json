@@ -16,8 +16,8 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["node_modules/jquery/dist/jquery.min.js", "canvas.js", "node_modules/bootstrap/dist/js/bootstrap.min.js", "jscolor.js", "node_modules/interactjs/dist/interact.min.js", "node_modules/jquery-ui-dist/jquery-ui.min.js"  ],
-        "css": ["popuptest.css", "node_modules/bootstrap/dist/css/bootstrap.min.css", "node_modules/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css", "node_modules/jquery-ui-dist/jquery-ui.min.css"]
+        "js": ["node_modules/jquery/dist/jquery.min.js", "canvas.js", "node_modules/bootstrap/dist/js/bootstrap.min.js", "jscolor.js", "node_modules/jquery-ui-dist/jquery-ui.js", "node_modules/interactjs/dist/interact.js"  ],
+        "css": ["popuptest.css", "node_modules/bootstrap/dist/css/bootstrap.min.css", "node_modules/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css", "node_modules/jquery-ui-dist/jquery-ui.css"]
       }
     ],
     "web_accessible_resources": [

@@ -220,44 +220,223 @@ function pasteHandler(e){
         }
 	}
 //draw pasted object
-function paste_createImage(source){
-    var somediv = document.createElement('div');
-    somediv.className = 'testID';
-    somediv.style.top = $(window).scrollTop() + (window.innerHeight / 2) + "px" //$(window).scrollTop() / 2 + "px"; //document.documentElement.scrollHeight + "px";
-    somediv.style.left = (window.innerWidth / 2) + "px";
-    somediv.style.position = 'absolute';
+function paste_createImage(source) {
 
-    var imageCanvas = document.createElement('canvas');
-    imageCanvas.style.position = 'absolute'
-    imageCanvas.style.zIndex = 999999;
-    imageCanvas.style.background = 'transparent';
+    var someDiv = document.createElement('div');
+    someDiv.style.display = 'inline-block';
+    someDiv.className = 'piloDragDiv';
+    var someImg = new Image();
+    someImg.style.border = '1px solid red';
+    someImg.src = source;
+    console.log(someImg);
+    someImg.className = 'piloResizeImg';
+    console.log(someImg.naturalHeight);
+    someImg.onload=function() {
+        someImg.style.height = someImg.naturalHeight + 'px';
+        someImg.style.width = someImg.naturalWidth + 'px';
+        someImg.parentNode.style.height = someImg.style.height;
+        someImg.parentNode.style.width = someImg.style.width;
+    }
 
-    var imagectx = imageCanvas.getContext("2d");
-	var pastedImage = new Image();
-	pastedImage.onload = function(){
-        console.log(this.width);
-        imagectx.canvas.height = this.height;
-        imagectx.canvas.width = this.width;
-        //somediv.height = this.height;
-        //somediv.width = this.width;
-        console.log(somediv.height);
-        console.log(somediv.width);
-        imagectx.drawImage(pastedImage, 0, 0);
-		}
-    pastedImage.src = source;
-    somediv.appendChild(imageCanvas);
-    document.body.appendChild(somediv);
-    somediv.height = imagectx.canvas.height;
-    somediv.width = imagectx.canvas.width;
-    //document.body.appendChild(imageCanvas);
-    // somediv.onresize = function() {
+    someDiv.style.top = $(window).scrollTop() + (window.innerHeight / 2) + "px";
+    someDiv.style.left = (window.innerWidth / 2) + "px";
+    someDiv.style.position = 'absolute';
+
+
+    someDiv.appendChild(someImg);
+    document.body.appendChild(someDiv);
+
+    $('.piloResizeImg').resizable();
+    $('.piloDragDiv').draggable({
+        appendTo: 'body',
+        start: function(event, ui) {
+            isDraggingMedia = true;
+        },
+        stop: function(event, ui) {
+            isDraggingMedia = false;
+        }
+    });
+
+//     var interact1 = document.createElement('div');
+//     var interact2 = new Image();
+//     interact2.src = source;
+//     interact2.style.border = '1px solid red';
+
+//     interact1.className = 'resize-container';
+//     interact2.className = 'resize-drag';
+
+//     document.body.appendChild(interact2);
+//     //document.body.appendChild(interact1);
+
+//     $('.resize-drag').draggable();
+//     interact('.resize-drag')
+// //   .draggable({
+// //     onmove: window.dragMoveListener
+// //     // ,restrict: {
+// //     //   restriction: 'parent',
+// //     //   elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+// //     // },
+// //   })
+//   .resizable({
+//     // resize from all edges and corners
+//     edges: { left: true, right: true, bottom: true, top: true },
+
+//     // keep the edges inside the parent
+//     // restrictEdges: {
+//     //   outer: 'parent',
+//     //   endOnly: true,
+//     // },
+
+//     // minimum size
+//     restrictSize: {
+//       min: { width: 100, height: 50 },
+//     },
+
+//     inertia: true,
+//   })
+//   .on('resizemove', function (event) {
+//     var target = event.target,
+//         x = (parseFloat(target.getAttribute('data-x')) || 0),
+//         y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+//     // update the element's style
+//     target.style.width  = event.rect.width + 'px';
+//     target.style.height = event.rect.height + 'px';
+
+//     // translate when resizing from top or left edges
+//     x += event.deltaRect.left;
+//     y += event.deltaRect.top;
+
+//     target.style.webkitTransform = target.style.transform =
+//         'translate(' + x + 'px,' + y + 'px)';
+
+//     target.setAttribute('data-x', x);
+//     target.setAttribute('data-y', y);
+//     target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height);
+//   });
+
+    // var somediv = document.createElement('div');
+    // somediv.classname = "somepiloname";
+    // //somediv.style.height = 100;
+    // //somediv.style.width = 100;
+    // somediv.style.display = "inline-block";
+    // somediv.style.backgroundColor = 'red';
+    // somediv.style.resize = "both";
+    // somediv.style.overflow = "auto";
+    // document.body.appendChild(somediv);
+    // $('.somepiloname').draggable();
+    
+    //somediv.className = 'testID';
+
+
+    // somediv.style.top = $(window).scrollTop() + (window.innerHeight / 2) + "px" //$(window).scrollTop() / 2 + "px"; //document.documentElement.scrollHeight + "px";
+    // somediv.style.left = (window.innerWidth / 2) + "px";
+    // somediv.style.position = 'absolute';
+
+    // var imageCanvas = document.createElement('canvas');
+    // imageCanvas.style.position = 'absolute'
+    // imageCanvas.style.zIndex = 999999;
+    // imageCanvas.style.background = 'transparent';
+    // imageCanvas.class = 'piloCanvas';
+
+    //var imagectx = imageCanvas.getContext("2d");
+    // var pastedImage = new Image();
+    // // pastedImage.className = 'piloPastedImage'
+    // $(".resizebleImage").resizable();
+
+	// pastedImage.onload = function(){
+    //     //console.log(this.width);
+    //     //imagectx.canvas.height = this.height;
+    //     //imagectx.canvas.width = this.width;
+    //     //somediv.height = this.height;
+    //     //somediv.width = this.width;
+    //     //console.log(somediv.height);
+    //     //console.log(somediv.width);
+    //     //imagectx.drawImage(pastedImage, 0, 0);
+    // 	}
+
+
+
+
+
+
+    // var pastedImage = new Image();
+    // pastedImage.className = ("piloPastedImage")
+    // pastedImage.src = source;
+    // pastedImage.style.top = $(window).scrollTop() + (window.innerHeight / 2) + "px"
+    // pastedImage.style.left = (window.innerWidth / 2) + "px";
+    // pastedImage.style.position = 'absolute !important';
+    // pastedImage.style.zIndex = 999999;
+    // //pastedImage.style.resize = 'both';
+    // //pastedImage.style.overflow = 'auto';
+    // document.body.appendChild(pastedImage);
+    // $(".piloPastedImage").draggable().find("img").resizable();
+
+
+
+
+
+
+
+    //pastedImage.style.height = 1000;
+    //pastedImage.style.width = 1000;
+    //document.body.appendChild(pastedImage);
+    //$(".piloPastedImage").draggable();
+    
+    //$(".piloPastedImage").selectable();
+    // somediv.appendChild(imageCanvas);
+    // document.body.appendChild(somediv);
+    // somediv.height = imagectx.canvas.height;
+    // somediv.width = imagectx.canvas.width;
+    // somediv.appendChild(imageCanvas);
+
+    // imageCanvas.onresize = function() {
     //     console.log(imagectx.canvas.height);
     //     console.log(imagectx.canvas.width);
     //     imagectx.canvas.height = 100;//somediv.height;
     //     imagectx.canvas.width = 100;//somediv.width;
     // }
-    $(".testID").draggable().selectable();//.resizable({ handles: "all" })
-	}
+
+    // imageCanvas.onclick = function(){
+
+    //     var data=this.toDataURL();
+    //     var ctx = this.getContext("2d");
+    //     this.width = 1000;
+    //     this.height = 1000;
+
+    //     var img = new Image();
+    //     img.onload=function(){
+    //         ctx.canvas.height = 1000;
+    //         ctx.canvas.width = 1000;
+    //         ctx.drawImage(img,0,0,img.width*0.5,img.height*0.5,0,0,this.width,this.height);
+    //     }
+    //     img.src = data;
+
+    //     // var tempctx = this.getContext("2d");
+    //     // var image = new Image();
+    //     // image.src = this.toDataURL();
+    //     // tempctx.canvas.height = 1000;
+    //     // tempctx.canvas.width = 1000;
+    //     // tempctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, 1000, 1000);
+    
+    // };
+    // $('.testID').click(function() {
+    //     console.log('resizing');
+    //     var image = new Image();
+    //     image.src = imageCanvas.toDataURL();
+    //     imageCanvas.height = 500;
+    //     imageCanvas.Width = 500;
+    //     imagectx.canvas.height = 500;
+    //     imagectx.canvas.width = 500;
+    //     imagectx.drawImage(image, 0, 0);
+    // });
+    // $('.piloCanvas').resize(function() {
+    //     console.log('imageresizedwhah');
+    //     var image = new Image();
+    //     image.src = this.toDataURL();
+    //     this.drawImage(image, 0, 0);
+    // });
+	// }
 
 
 
@@ -306,5 +485,4 @@ function attachDrag() {
 }
 }
 }
-
-
+}
