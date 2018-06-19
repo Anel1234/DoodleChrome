@@ -57,6 +57,20 @@ chrome.contextMenus.create({
       //alert('2nd');
     },
 });
+
+// chrome.contextMenus.create({
+//     title: "Delete",
+//     parentId: doodlechrome,
+//     contexts: ["image"],
+//     onclick: function() {
+//         chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+//             chrome.tabs.sendMessage(tabs[0].id, 'deleteImage', function(response) {
+//             //   console.log('draw');
+//             });
+//         });
+//       //alert('2nd');
+//     },
+// });
 // chrome.contextMenus.create({
 //     title: "Paste",
 //     parentId: doodlechrome,

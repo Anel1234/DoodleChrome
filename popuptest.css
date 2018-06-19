@@ -34,16 +34,18 @@
     color: #fff;
 }
 
-.piloPastedImage {
-    /* resize: both;
-    overflow: auto; */
-    /* position: absolute;
-    z-index: 999999; */
-
-}
-
 .slidecontainer {
     width: 100%; /* Width of the outside container */
+}
+
+.piloResizeImg{
+    border: 2px solid transparent;
+    border-radius: 5px;
+}
+
+.piloResizeImg:hover{
+    border: 2px dashed red;
+    border-radius: 5px;
 }
 
 /* The slider itself */

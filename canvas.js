@@ -81,8 +81,19 @@ window.onload = function() {
                 lines = [];
                 redrawCanvas();
             }
+
+            if( request === "deleteImage"){
+                $('.piloDragDivSelected').remove();    
+            }
         }
     );
+
+    this.document.onkeydown = function(){
+        var key = event.keyCode || event.charCode;
+        if( key == 8 || key == 46 ){
+            $('.piloDragDivSelected').remove();
+        }
+    }
 
     var canv = document.createElement('canvas');
     canv.id = 'pilavID';
@@ -218,7 +229,8 @@ function pasteHandler(e){
         var source = URLObj.createObjectURL(blob);
         paste_createImage(source);
         }
-	}
+    }
+
 //draw pasted object
 function paste_createImage(source) {
 
@@ -226,17 +238,34 @@ function paste_createImage(source) {
     someDiv.style.display = 'inline-block';
     someDiv.className = 'piloDragDiv';
     var someImg = new Image();
-    someImg.style.border = '1px solid red';
+    //someImg.style.border = '1px solid red';
     someImg.src = source;
-    console.log(someImg);
-    someImg.className = 'piloResizeImg';
-    console.log(someImg.naturalHeight);
+    //$('.piloImgSelected').removeClass('piloImgSelected');
+    someImg.className = 'piloResizeImg'; //piloImgSelected';
     someImg.onload=function() {
         someImg.style.height = someImg.naturalHeight + 'px';
         someImg.style.width = someImg.naturalWidth + 'px';
         someImg.parentNode.style.height = someImg.style.height;
         someImg.parentNode.style.width = someImg.style.width;
+        someImg.style.zindex = '999999';
     }
+
+    
+
+    someImg.onkeydown = function(){
+        //alert('you pressed delete!!!DSdasd')
+        $('.piloResizeImgSelected').remove();
+        var key = event.keyCode || event.charCode;
+        if( key == 8 || key == 46 ){
+            //alert('2hshsahha');
+            this.remove();
+        }
+    }
+
+    // someImg.click(function(){
+    //     $('.piloImgSelected').removeClass('piloImgSelected');
+    //     this.className += 'piloImgSelected';
+    // });
 
     someDiv.style.top = $(window).scrollTop() + (window.innerHeight / 2) + "px";
     someDiv.style.left = (window.innerWidth / 2) + "px";
@@ -256,6 +285,11 @@ function paste_createImage(source) {
             isDraggingMedia = false;
         }
     });
+
+    $('.piloDragDiv').hover(
+        function(){ $(this).addClass('piloDragDivSelected') },
+        function(){ $(this).removeClass('piloDragDivSelected') }
+    )
 
 //     var interact1 = document.createElement('div');
 //     var interact2 = new Image();
