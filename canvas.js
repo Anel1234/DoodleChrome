@@ -5,6 +5,8 @@ var lines = [];
 var selected = 'select';
 var selectedColor = '000000';
 var selectedWidth = 25;
+var piloSelectionX1 = 0, piloSelectionX2 = 0, piloSelectionY1 = 0, piloSelectionY2 = 0;
+//var piloDrawSelectionBox = 0;
 
 
 window.onload = function() {
@@ -56,6 +58,16 @@ window.onload = function() {
                 $("#pilavID").css('pointer-events', "none");
                 selected = "select";
             }
+
+            if( request === "selectionbox" ) {
+                $("#pilavID").css('pointer-events', "auto");
+                $("#pilavID").show();
+                ctx.globalCompositeOperation="source-over";
+                ctx.globalAlpha=1;
+                //piloDrawSelectionBox = 1;
+                selected = "selectionbox";
+            }
+
             if( request === "draw") {
                 //resizeCanvas();
                 $("#pilavID").css('pointer-events', "auto");
@@ -95,6 +107,42 @@ window.onload = function() {
         }
     }
 
+    var selectionBox = document.createElement('div');
+    selectionBox.hidden = 1;
+    document.body.appendChild(selectionBox);
+    selectionBox.id = 'piloSelectionBoxDiv';
+
+    function reCalc() { //This will restyle the div
+        var x3 = Math.min(piloSelectionX1,piloSelectionX2); //Smaller X
+        var x4 = Math.max(piloSelectionX1,piloSelectionX2); //Larger X
+        var y3 = Math.min(piloSelectionY1,piloSelectionY2); //Smaller Y
+        var y4 = Math.max(piloSelectionY1,piloSelectionY2); //Larger Y
+        selectionBox.style.left = x3 + 'px';
+        selectionBox.style.top = y3 + 'px';
+        selectionBox.style.width = x4 - x3 + 'px';
+        selectionBox.style.height = y4 - y3 + 'px';
+    }
+    onmousedown = function(e) {
+        if (selected == "selectionbox") {
+            selectionBox.hidden = 0; //Unhide the div
+            piloSelectionX1 = e.clientX; //Set the initial X
+            piloSelectionY1 = e.clientY; //Set the initial Y
+            reCalc();
+        }
+    };
+    onmousemove = function(e) {
+        if (selected == "selectionbox") {
+            piloSelectionX2 = e.clientX; //Update the current position X
+            piloSelectionY2 = e.clientY; //Update the current position Y
+            reCalc();
+        }
+    };
+    onmouseup = function(e) {
+        if (selected == "selectionbox") {
+            selectionBox.hidden = 1; //Hide the div
+        }
+    };
+    
     var canv = document.createElement('canvas');
     canv.id = 'pilavID';
     canv.style.position = 'absolute';
@@ -155,7 +203,7 @@ function resizeCanvas() {
 }
 
 function Draw(x, y, isDown) {
-    if (isDown) {
+    if (isDown && selected != "selectionbox") {
         ctx.beginPath();
         ctx.strokeStyle = selectedColor;
         //alert(parseInt($('#myRange').val()));
@@ -236,6 +284,7 @@ function paste_createImage(source) {
 
     var someDiv = document.createElement('div');
     someDiv.style.display = 'inline-block';
+    someDiv.style.zIndex = 1000000;
     someDiv.className = 'piloDragDiv';
     var someImg = new Image();
     //someImg.style.border = '1px solid red';

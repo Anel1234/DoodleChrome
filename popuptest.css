@@ -3,6 +3,11 @@
     overflow: auto;
 }
 
+#piloSelectionBoxDiv{
+    border: 1px dotted red;
+    position: absolute;
+}
+
 #pilavdiv{
     height:200px;
     width: 400px;

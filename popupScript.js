@@ -2,7 +2,6 @@ window.onload = function() {
 
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'loaded', function(response) {
-        //   console.log('draw');
         });
       });
 
@@ -64,6 +63,18 @@ document.addEventListener('DOMContentLoaded', function() {
         //chrome.runtime.sendMessage({"message": "Existing"});
         chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
             chrome.tabs.sendMessage(tabs[0].id, 'draw', function(response) {
+            //   console.log('draw');
+            });
+          });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementById('selectionboxbutton');
+    link.addEventListener('click', function(response) {
+        //chrome.runtime.sendMessage({"message": "Existing"});
+        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, 'selectionbox', function(response) {
             //   console.log('draw');
             });
           });
